@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finance Tracker</title>
+
+<!-- iOS "add to home screen" behaviour -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#12181F">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ============ HOME ============ -->
+  <section id="screen-home" class="screen active">
+    <div class="home-header">
+      <span class="greeting" id="greeting-name">Hello</span>
+    </div>
+
+    <div class="balance-hero">
+      <div class="balance-label">Account balance</div>
+      <div class="balance-amount" id="home-balance">₹0</div>
+      <div class="balance-updated">Loading…</div>
+    </div>
+
+    <div class="section-label">Recent transactions</div>
+    <ul class="tx-list" id="home-tx-list">
+      <li class="loading-text">Loading transactions…</li>
+    </ul>
+  </section>
+
+  <!-- ============ HISTORY ============ -->
+  <section id="screen-history" class="screen">
+    <div class="page-title">History</div>
+
+    <input type="text" id="search-input" class="search-bar" placeholder="Search description or amount">
+
+    <div class="filter-row">
+      <select id="filter-method" class="filter-select">
+        <option value="">All methods</option>
+      </select>
+      <input type="date" id="filter-from" class="filter-date" aria-label="From date">
+      <input type="date" id="filter-to" class="filter-date" aria-label="To date">
+    </div>
+
+    <ul class="tx-list" id="history-tx-list">
+      <li class="loading-text">Loading transactions…</li>
+    </ul>
+
+    <button id="load-more-btn" class="load-more-btn" style="display:none;">Load more</button>
+  </section>
+
+  <!-- ============ BALANCES ============ -->
+  <section id="screen-balances" class="screen">
+    <div class="page-title">Balances</div>
+    <div id="balances-list">
+      <div class="loading-text">Loading balances…</div>
+    </div>
+  </section>
+
+  <!-- ============ TRANSACTION DETAIL ============ -->
+  <section id="screen-detail" class="screen">
+    <button id="back-btn" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Back
+    </button>
+
+    <div class="detail-amount" id="detail-amount">₹0</div>
+    <div class="detail-desc" id="detail-desc"></div>
+    <div class="detail-meta" id="detail-meta"></div>
+  </section>
+
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav id="bottom-nav">
+  <button class="nav-btn active" data-tab="home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+    Home
+  </button>
+  <button class="nav-btn" data-tab="history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    History
+  </button>
+  <button class="nav-btn" data-tab="balances">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    Balances
+  </button>
+</nav>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
