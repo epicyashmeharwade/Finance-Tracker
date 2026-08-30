@@ -20,6 +20,7 @@ const DEFAULT_MONTH_RANGE = getCurrentMonthRange();
 let HISTORY_FILTERS = { text: '', method: '', from: DEFAULT_MONTH_RANGE.from, to: DEFAULT_MONTH_RANGE.to };
 let refreshTimer = null;
 let isLoading = false;
+let SELECTED_ACCOUNT = '__total__'; // '__total__' or a bank name from CONFIG.OPENING_BALANCES
 
 // ============================================================
 // FORMATTING HELPERS
@@ -152,9 +153,38 @@ function getGreeting() {
   return `Hi, look who's up late, ${CONFIG.USER_NAME}`;
 }
 
+function populateAccountSelector() {
+  const selector = document.getElementById('account-selector');
+  if (selector.dataset.populated) return;
+
+  Object.keys(CONFIG.OPENING_BALANCES).forEach(acc => {
+    const opt = document.createElement('option');
+    opt.value = acc;
+    opt.textContent = acc;
+    selector.appendChild(opt);
+  });
+
+  selector.value = SELECTED_ACCOUNT;
+  selector.dataset.populated = 'true';
+
+  selector.addEventListener('change', (e) => {
+    SELECTED_ACCOUNT = e.target.value;
+    renderHome();
+  });
+}
+
 function renderHome() {
   document.getElementById('greeting-name').textContent = getGreeting();
-  document.getElementById('home-balance').innerHTML = formatRupees(window.__TOTAL_BALANCE__ || 0);
+  populateAccountSelector();
+
+  const balances = window.__ACCOUNT_BALANCES__ || {};
+  const displayedBalance = SELECTED_ACCOUNT === '__total__'
+    ? (window.__TOTAL_BALANCE__ || 0)
+    : (balances[SELECTED_ACCOUNT] || 0);
+
+  document.getElementById('home-balance').innerHTML = formatRupees(displayedBalance);
+  document.querySelector('.balance-label').textContent =
+    SELECTED_ACCOUNT === '__total__' ? 'Account balance' : SELECTED_ACCOUNT;
 
   const list = document.getElementById('home-tx-list');
   const recent = ALL_TRANSACTIONS.slice(0, 10);
