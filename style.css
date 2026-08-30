@@ -67,18 +67,16 @@ body.detail-open #app { padding-bottom: 24px; }
    ============================================================ */
 .home-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   padding-top: 12px;
 }
 
 .greeting {
-  font-size: 15px;
-  color: var(--text-muted);
-  letter-spacing: 0.01em;
-}
-.greeting strong {
-  color: var(--text-primary);
+  font-family: 'Baloo 2', var(--font-body);
+  font-size: 20px;
   font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 0.01em;
 }
 
 /* ============================================================
@@ -243,9 +241,27 @@ body.detail-open #app { padding-bottom: 24px; }
   padding: 10px 10px;
   border-radius: 10px;
   border: 1px solid var(--rule);
-  background: var(--surface);
+  background-color: var(--surface);
   color: var(--text-primary);
   font-size: 13px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: none;
+  box-shadow: none;
+}
+
+.filter-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238C95A1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+  padding-right: 30px;
+}
+
+.filter-select:focus, .filter-date:focus {
+  outline: none;
+  border-color: var(--accent-gold);
 }
 
 .load-more-btn {

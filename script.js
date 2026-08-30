@@ -5,7 +5,19 @@ let ALL_TRANSACTIONS = [];   // every parsed row, newest first, with closingBala
 let CURRENT_TAB = 'home';    // 'home' | 'history' | 'balances'
 let DETAIL_ORIGIN = 'home';  // where to go back to from a detail screen
 let HISTORY_VISIBLE_COUNT = CONFIG.PAGE_SIZE;
-let HISTORY_FILTERS = { text: '', method: '', from: '', to: '' };
+function getCurrentMonthRange() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const pad = (n) => String(n).padStart(2, '0');
+  const firstDay = `${year}-${pad(month + 1)}-01`;
+  const lastDate = new Date(year, month + 1, 0).getDate();
+  const lastDay = `${year}-${pad(month + 1)}-${pad(lastDate)}`;
+  return { from: firstDay, to: lastDay };
+}
+
+const DEFAULT_MONTH_RANGE = getCurrentMonthRange();
+let HISTORY_FILTERS = { text: '', method: '', from: DEFAULT_MONTH_RANGE.from, to: DEFAULT_MONTH_RANGE.to };
 let refreshTimer = null;
 let isLoading = false;
 
@@ -317,6 +329,9 @@ function renderCurrentScreen() {
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('filter-from').value = HISTORY_FILTERS.from;
+  document.getElementById('filter-to').value = HISTORY_FILTERS.to;
+
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));
   });
