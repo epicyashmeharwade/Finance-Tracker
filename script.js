@@ -32,6 +32,55 @@ function formatRupees(amount) {
   return `${sign}<span class="rupee">₹</span>${inrFormatter.format(Math.abs(amount))}`;
 }
 
+// ============================================================
+// ODOMETER — rolling digit animation for the home hero balance
+// ============================================================
+function buildOdometerHTML(amount) {
+  const isNegative = amount < 0;
+  const numberStr = inrFormatter.format(Math.abs(amount));
+
+  let html = '';
+  if (isNegative) html += `<span class="odometer-static">-</span>`;
+  html += `<span class="rupee">₹</span>`;
+
+  for (const ch of numberStr) {
+    if (/[0-9]/.test(ch)) {
+      const digit = Number(ch);
+      const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(d => `<span>${d}</span>`).join('');
+      html += `<span class="odometer-digit"><span class="odometer-digit-strip" data-target="${digit}">${digits}</span></span>`;
+    } else {
+      html += `<span class="odometer-static">${ch}</span>`;
+    }
+  }
+  return html;
+}
+
+function animateOdometer(container) {
+  const strips = container.querySelectorAll('.odometer-digit-strip');
+  strips.forEach(strip => {
+    strip.style.transition = 'none';
+    strip.style.transform = 'translateY(0)';
+  });
+  // force reflow so the browser registers the reset position before animating
+  void container.offsetHeight;
+  requestAnimationFrame(() => {
+    strips.forEach(strip => {
+      strip.style.transition = '';
+      const target = Number(strip.dataset.target);
+      strip.style.transform = `translateY(-${target}em)`;
+    });
+  });
+}
+
+function renderOdometerBalance(amount) {
+  const container = document.getElementById('home-balance');
+  const key = String(amount);
+  if (container.dataset.lastValue === key) return; // unchanged — skip re-animating
+  container.dataset.lastValue = key;
+  container.innerHTML = buildOdometerHTML(amount);
+  requestAnimationFrame(() => animateOdometer(container));
+}
+
 function formatDate(d) {
   if (!(d instanceof Date) || isNaN(d)) return '—';
   return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -169,6 +218,7 @@ function populateAccountSelector() {
 
   selector.addEventListener('change', (e) => {
     SELECTED_ACCOUNT = e.target.value;
+    delete document.getElementById('home-balance').dataset.lastValue;
     renderHome();
   });
 }
@@ -182,7 +232,7 @@ function renderHome() {
     ? (window.__TOTAL_BALANCE__ || 0)
     : (balances[SELECTED_ACCOUNT] || 0);
 
-  document.getElementById('home-balance').innerHTML = formatRupees(displayedBalance);
+  renderOdometerBalance(displayedBalance);
   document.querySelector('.balance-label').textContent =
     SELECTED_ACCOUNT === '__total__' ? 'Account balance' : SELECTED_ACCOUNT;
 

@@ -141,6 +141,30 @@ body.detail-open #app { padding-bottom: 24px; }
   vertical-align: 2px;
 }
 
+.odometer-static {
+  display: inline-block;
+}
+
+.odometer-digit {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.odometer-digit-strip {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(0);
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.odometer-digit-strip span {
+  height: 1em;
+  line-height: 1;
+  text-align: center;
+}
+
 .balance-updated {
   margin-top: 14px;
   font-size: 12px;
