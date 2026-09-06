@@ -74,6 +74,9 @@ function animateOdometer(container) {
 
 function renderOdometerBalance(amount) {
   const container = document.getElementById('home-balance');
+  const key = String(amount);
+  if (container.dataset.lastValue === key) return; // unchanged — skip re-animating
+  container.dataset.lastValue = key;
   container.innerHTML = buildOdometerHTML(amount);
   requestAnimationFrame(() => animateOdometer(container));
 }
@@ -215,6 +218,7 @@ function populateAccountSelector() {
 
   selector.addEventListener('change', (e) => {
     SELECTED_ACCOUNT = e.target.value;
+    delete document.getElementById('home-balance').dataset.lastValue;
     renderHome();
   });
 }
