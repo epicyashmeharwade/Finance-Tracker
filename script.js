@@ -32,6 +32,11 @@ function formatRupees(amount) {
   return `${sign}<span class="rupee">₹</span>${inrFormatter.format(Math.abs(amount))}`;
 }
 
+function formatPlainNumber(amount) {
+  const sign = amount < 0 ? '-' : '';
+  return `${sign}${inrFormatter.format(Math.abs(amount))}`;
+}
+
 // ============================================================
 // ODOMETER — rolling digit animation for the home hero balance
 // ============================================================
@@ -361,7 +366,7 @@ function openDetail(rowIndex, origin) {
   DETAIL_ORIGIN = origin;
 
   const amountClass = t.amount < 0 ? 'negative' : 'positive';
-  document.getElementById('detail-amount').innerHTML = formatRupees(t.amount);
+  document.getElementById('detail-amount').innerHTML = formatPlainNumber(t.amount);
   document.getElementById('detail-amount').className = `detail-amount ${amountClass}`;
   document.getElementById('detail-desc').textContent = t.description;
   document.getElementById('detail-meta').innerHTML = `
